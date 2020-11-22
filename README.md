@@ -5,6 +5,7 @@
 ## Полезные ссылки
 * [Внтутреннее устройство Git (git)](https://www.opennet.ru/base/dev/git_guts.txt.html)
 * [Внтутреннее устройство Git - habr](https://habr.com/ru/company/badoo/blog/163853/)
+* [Git снизу вверх](https://vas3k.ru/blog/319/)
 
 
 ## Объекты (Objects)
