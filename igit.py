@@ -24,7 +24,7 @@ def cmd_init(arg):
         os.makedirs(igit_dir + name)
     for name in repo_files:
         create_empty_file(igit_dir + name)
-    print('Инициализация репозитория завершена.')
+    # print('Инициализация репозитория завершена.')
     return True
 
 
@@ -73,8 +73,13 @@ def main():
     cmd = argv[1]
 
     if cmd == 'init':
-        print('Инициализация репозитория')
-        cmd_init(argv[2:])
+        # print('Инициализация репозитория')
+        flag_exit = cmd_init(argv[2:])
+        current_dir = os.getcwd()
+        if flag_exit:
+            print(f'Создан пустой iGit репозиторий в папке: {current_dir} ')
+        else:
+            print(f'Ошибка при создании iGit репозитория в папке: {current_dir}')
         exit(0)
 
     if cmd == 'add':
