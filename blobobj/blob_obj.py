@@ -69,7 +69,7 @@ class BlobObject:
 
 def main():
     # bobj = BlobObject("test/text_for_blobobj.txt", output_dir='')
-    bobj = BlobObject("test/text_for_blobobj (copy).txt", output_dir='')
+    bobj = BlobObject("test/test-files/text_for_blobobj (copy).txt", output_dir='')
     # bobj = BlobObject("test/image.png", output_dir='')
     s = bobj.save()
     print(s)
