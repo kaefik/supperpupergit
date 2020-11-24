@@ -11,7 +11,7 @@ class BlobObject:
     Blob-объект - однозвначно определяет хеш по его содержимому и  размеру файла
     """
 
-    def __init__(self, filename="", output_dir='.igit/blobobj/'):
+    def __init__(self, filename="", output_dir='.igit/objects/'):
         self.output_dir = output_dir
         self.filename = filename
         self.sha1 = ""
