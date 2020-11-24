@@ -6,13 +6,13 @@
 import hashlib
 
 
-def obj_sha1(input_string):
+def obj_sha1(bstr):
     """
     функция хеширования на SHA1
     :param input_string: строка которую нужно хешировать
     :return: вовращает 16-ричный хеш
     """
-    bstr = str.encode(input_string)
+    # bstr = str.encode(input_string)
     hash_object = hashlib.sha1(bstr)
     hex_dig = hash_object.hexdigest()
     return hex_dig
