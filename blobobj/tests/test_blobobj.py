@@ -42,23 +42,53 @@ class BlobObjectTest(unittest.TestCase):
 
     def test_restore_textfile(self):
         """
-        проверка корректно ли восстановился текстовый файл, т.е. совпадает размер, хеш и сам вид файла
+        BlobOblect: проверка корректно ли восстановился текстовый файл, т.е. совпадает размер, хеш и сам вид файла
         :return:
         """
-        b_obj = BlobObject(filename=self.current_dir_test + '/test-files/text_for_blobobj.txt', output_dir=self.current_dir_test + '/test-files/out/')
+        b_obj = BlobObject(filename=self.current_dir_test + '/test-files/text_for_blobobj.txt',
+                           output_dir=self.current_dir_test + '/test-files/out/')
         b_obj.save()
-        b_obj.restore(input_directory=self.current_dir_test+'/test-files/out/', output_file=self.current_dir_test+'/test-files/out/restore_text.txt')
-
+        b_obj.restore(input_directory=self.current_dir_test + '/test-files/out/',
+                      output_file=self.current_dir_test + '/test-files/out/restore_text.txt')
+        size_restore = os.path.getsize(self.current_dir_test + '/test-files/out/restore_text.txt')
+        self.assertEqual(b_obj.size, size_restore)
 
     def test_restore_imagefile(self):
         """
-        проверка корректно ли восстановился файл изображения png, т.е. совпадает размер, хеш и сам вид файла
+        BlobOblect: проверка корректно ли восстановился файл изображения png, т.е. совпадает размер, хеш и сам вид файла
         :return:
         """
 
-        b_obj = BlobObject(filename=self.current_dir_test + '/test-files/image_670610.png', output_dir=self.current_dir_test + '/test-files/out/')
+        b_obj = BlobObject(filename=self.current_dir_test + '/test-files/image_670610.png',
+                           output_dir=self.current_dir_test + '/test-files/out/')
         b_obj.save()
-        b_obj.restore(input_directory=self.current_dir_test+'/test-files/out/', output_file=self.current_dir_test+'/test-files/out/restore_image.png')
+        b_obj.restore(input_directory=self.current_dir_test + '/test-files/out/',
+                      output_file=self.current_dir_test + '/test-files/out/restore_image.png')
+        size_restore = os.path.getsize(self.current_dir_test + '/test-files/out/restore_image.png')
+        self.assertEqual(b_obj.size, size_restore)
+
+    def test_check_valid_blobobj_file(self):
+        """
+        BlobOblect: проверка соответствия хеша содержимому файла который корректный
+        :return:
+        """
+        b_obj = BlobObject(filename=self.current_dir_test + '/test-files/text_for_blobobj.txt',
+                           output_dir=self.current_dir_test + '/test-files/out/')
+        b_obj.sha1 = 'c79c497f5012c3065de47887d819ecca426ac697'
+        res = b_obj.check_exist_blob(check_dir=self.current_dir_test + '/test-files/out-etalon/valid-blobobj/')
+        # print(f"\n\nres = {res} \n\n")
+        self.assertEqual(res, True)
+
+
+    def test_check_novalid_blobobj_file(self):
+        """
+        BlobOblect: проверка соответствия хеша содержимому файла который НЕ корректный
+        :return:
+        """
+        b_obj = BlobObject(filename=self.current_dir_test + '/test-files/text_for_blobobj.txt',
+                           output_dir=self.current_dir_test + '/test-files/out/')
+        b_obj.sha1 = 'c79c497f5012c3065de47887d819ecca426ac697'
+        self.assertRaises(BaseException, b_obj.check_exist_blob,check_dir=self.current_dir_test + '/test-files/out-etalon/novalid-blobobj/')
 
 
 if __name__ == '__main__':
