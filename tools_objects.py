@@ -36,6 +36,7 @@ def get_file_dirs(input_dir):
 def main():
     # f, d = get_file_dirs('/home/oilnur/prj/prj-py/supperpupergit')
     # print(d)
+    pass
 
 
 if __name__ == '__main__':
