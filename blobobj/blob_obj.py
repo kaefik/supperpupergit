@@ -41,8 +41,9 @@ class BlobObject:
             os.makedirs(blob_dir)
         except FileExistsError:
             # если файл существует проверяем на то что он корректный с точки зрения хеша
-            self.check_exist_blob()
-            return self.sha1
+            flag = self.check_exist_blob()
+            if flag:
+                return self.sha1
 
         # первой строкой добавляем размер файла, остальное самим файлом
         with open(blob_dir + self.sha1[2:], "bw") as f:
