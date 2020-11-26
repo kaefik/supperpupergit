@@ -38,20 +38,6 @@ class BlobObjectTest(unittest.TestCase):
         b_obj = BlobObject(filename=self.current_dir_test + '/test-files/image_670610.png', output_dir='')
         self.assertEqual(b_obj.size, 670610)
 
-    def test_check_exist_blob_novalid(self):
-        """
-        BlobOblect: проверка на существование файла blob, но невалидного с точки зрения хеша
-        :return:
-        """
-        pass
-
-    def test_check_exist_blob_valid(self):
-        """
-        BlobOblect: проверка на существование файла blob, правильного с точки зрения хеша
-        :return:
-        """
-        pass
-
     def test_restore_textfile(self):
         """
         BlobOblect: проверка корректно ли восстановился текстовый файл, т.е. совпадает размер, хеш и сам вид файла
@@ -88,7 +74,6 @@ class BlobObjectTest(unittest.TestCase):
                            output_dir=self.output_dir)
         b_obj.sha1 = 'c79c497f5012c3065de47887d819ecca426ac697'
         res = b_obj.check_exist_blob(check_dir=self.current_dir_test + '/test-files/out-etalon/valid-blobobj/')
-        # print(f"\n\nres = {res} \n\n")
         self.assertEqual(res, True)
 
     def test_check_novalid_blobobj_file(self):
@@ -104,19 +89,16 @@ class BlobObjectTest(unittest.TestCase):
 
     def test_check_dublicate_name_directory_blobobj(self):
         """
-        проверка того что если есть папка blobobj, но файлы с другими blob-файлами
+        BlobOblect: проверка того что если есть папка blobobj, но файлы с другими blob-файлами
         """
 
         # создание папки в которой будет проверяться
         shutil.copytree(self.current_dir_test + '/test-files/out-etalon/dublicate-folder/c7/',
                         self.output_dir + 'c7/')
-
         b_obj = BlobObject(filename=self.current_dir_test + '/test-files/text_for_blobobj.txt',
                            output_dir=self.output_dir)
         sha1 = b_obj.save()
-
         f, d = get_file_dirs(self.output_dir + 'c7/')
-        
         self.assertEqual(f, {'9c497f5012c3065de47887d819ecca426ac696', '9c497f5012c3065de47887d819ecca426ac697'})
 
 
