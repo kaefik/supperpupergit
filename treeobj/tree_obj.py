@@ -24,11 +24,20 @@ class ItemTreeObject:
             * <имя файла>
     """
 
-    def __init__(self, right_access='', typeobj=NOOBJ, sha1='', filename=''):
-        self.right_access = right_access  # <права файла>
-        self.typeobj = typeobj  # <тип объекта(tree or blob)>
-        self.sha1 = sha1  # <sha1 объекта>
-        self.filename = filename  # <имя файла>
+    def __init__(self):
+        # (self, right_access='', typeobj=NOOBJ, sha1='', nameobj=''):
+        self.right_access = '000000'  # <права файла>
+        self.typeobj = NOOBJ  # <тип объекта(tree or blob)>
+        self.sha1 = '0000000000000000000000000000000000000000'  # <sha1 объекта>
+        self.name = ''  # <имя файла или папки>
+
+    def generate_blobs(self):
+        """
+        получение данных
+        """
+        if isfile(join(self.name, f)):
+            pass
+
 
 
 class TreeObject:
@@ -58,6 +67,18 @@ class TreeObject:
                 self._files.add(f)
             else:
                 self._directory.add(f)
+
+    def generate(self):
+        """
+        генерация содержимого дерева
+        """
+        pass
+
+    def save(self, filename=''):
+        """
+        сохранение тектового представления дерева в файл filename
+        """
+        pass
 
 
 def main():
