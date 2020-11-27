@@ -6,13 +6,12 @@ import os
 from tools_objects import obj_sha1, get_file_dirs
 from blobobj.blob_obj import BlobObject
 
-
 from os.path import isfile, join
 
 # тип объекта
-NOOBJ = 0  # нет объекта
-BLOB = 1  # объект Blob
-TREE = 2  # объект Tree
+NOOBJ = None  # нет объекта
+BLOB = 'blob'  # объект Blob
+TREE = 'tree'  # объект Tree
 
 
 class ItemTreeObject:
@@ -25,22 +24,37 @@ class ItemTreeObject:
             * <имя файла>
     """
 
-    def __init__(self, input_name='', output_dir='./'):
+    def __init__(self, input_name=''):
         self.obj = None  # ссылка на объект
         self.input_name = input_name
-        self.output_dir = output_dir
-        # (self, right_access='', typeobj=NOOBJ, sha1='', nameobj=''):
         self.right_access = '000000'  # <права файла>
         self.typeobj = NOOBJ  # <тип объекта(tree or blob)>
         self.sha1 = '0000000000000000000000000000000000000000'  # <sha1 объекта>
         self.name = ''  # <имя файла или папки>
 
-    def save(self):
+    def save(self, output_dir='./'):
         """
         получение данных
         """
+        result = ''
         if isfile(join(self.name, self.input_name)):
-            self.obj = BlobObject(filename=self.input_name)
+            self.obj = BlobObject(filename=self.input_name, output_dir=output_dir)
+            self.sha1 = self.obj.save()
+            self.typeobj = BLOB
+            self.name = os.path.basename(self.input_name)
+            self.right_access = '000000'
+        else:
+            self.typeobj = TREE
+            self.right_access = '000000'
+            self.sha1 = '0000000000000000000000000000000000000000'
+            self.name = self.input_name
+
+    def get(self):
+        """
+        получение строки для сохранения результата
+        """
+        result = f'{self.right_access} {self.typeobj} {self.sha1} {self.name}'
+        return result
 
 
 class TreeObject:
