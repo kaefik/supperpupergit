@@ -3,8 +3,9 @@
 """
 import os
 
-# from tools_objects import obj_sha1
+from tools_objects import obj_sha1, get_file_dirs
 # from blobobj.blob_obj import BlobObject
+
 
 from os.path import isfile, join
 
@@ -60,13 +61,8 @@ class TreeObject:
         поиск всех файлов и папок в self.input_dir
         :return:
         """
-        self._files = set()
-        self._directory = set()
-        for f in os.listdir(self.input_dir):
-            if isfile(join(self.input_dir, f)):
-                self._files.add(f)
-            else:
-                self._directory.add(f)
+        self._files, self._directory = get_file_dirs(self.input_dir)
+
 
     def generate(self):
         """
