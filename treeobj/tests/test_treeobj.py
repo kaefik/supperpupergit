@@ -46,3 +46,12 @@ class BlobObjectTest(unittest.TestCase):
 
         self.assertEqual(treeObj._files, {'1.py', 'file1.txt'})
         self.assertEqual(treeObj._directory, {'papka1'})
+
+    def test_create_blobobj_1(self):
+        """
+        проверка сохранения blobobj из папки  test-files/1/
+        """
+        treeObj = TreeObject(input_dir=self.input_dir + '1/',
+                             output_dir=self.output_dir)
+        treeObj.get_all_files_and_directory()
+

@@ -4,7 +4,7 @@
 import os
 
 from tools_objects import obj_sha1, get_file_dirs
-# from blobobj.blob_obj import BlobObject
+from blobobj.blob_obj import BlobObject
 
 
 from os.path import isfile, join
@@ -25,20 +25,22 @@ class ItemTreeObject:
             * <имя файла>
     """
 
-    def __init__(self):
+    def __init__(self, input_name='', output_dir='./'):
+        self.obj = None  # ссылка на объект
+        self.input_name = input_name
+        self.output_dir = output_dir
         # (self, right_access='', typeobj=NOOBJ, sha1='', nameobj=''):
         self.right_access = '000000'  # <права файла>
         self.typeobj = NOOBJ  # <тип объекта(tree or blob)>
         self.sha1 = '0000000000000000000000000000000000000000'  # <sha1 объекта>
         self.name = ''  # <имя файла или папки>
 
-    def generate_blobs(self):
+    def save(self):
         """
         получение данных
         """
-        if isfile(join(self.name, f)):
-            pass
-
+        if isfile(join(self.name, self.input_name)):
+            self.obj = BlobObject(filename=self.input_name)
 
 
 class TreeObject:
@@ -62,7 +64,6 @@ class TreeObject:
         :return:
         """
         self._files, self._directory = get_file_dirs(self.input_dir)
-
 
     def generate(self):
         """
