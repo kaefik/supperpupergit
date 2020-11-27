@@ -44,6 +44,7 @@ class ItemTreeObject:
             self.name = os.path.basename(self.input_name)
             self.right_access = '000000'
         else:
+            # TODO: вставить создание объекта TreeObject
             self.typeobj = TREE
             self.right_access = '000000'
             self.sha1 = '0000000000000000000000000000000000000000'
@@ -83,7 +84,14 @@ class TreeObject:
         """
         генерация содержимого дерева
         """
-        pass
+        self.obj = set()
+        self.get_all_files_and_directory()
+        # создание объектов типа blob
+        for item in self._files:
+            item_obj = ItemTreeObject(input_name=self.input_dir + item)
+            item_obj.save(self.output_dir)
+            res = item_obj.get()
+            self.obj.add(res)
 
     def save(self, filename=''):
         """

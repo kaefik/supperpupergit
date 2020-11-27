@@ -34,7 +34,7 @@ class BlobObjectTest(unittest.TestCase):
                              output_dir=self.output_dir)
         treeObj.get_all_files_and_directory()
 
-        self.assertEqual(treeObj._files, {'file1.txt'})
+        self.assertEqual(treeObj._files, {'text_for_blobobj.txt'})
         self.assertEqual(treeObj._directory, set())
 
     def test_get_all_files_and_directory_2(self):
@@ -47,11 +47,12 @@ class BlobObjectTest(unittest.TestCase):
         self.assertEqual(treeObj._files, {'1.py', 'file1.txt'})
         self.assertEqual(treeObj._directory, {'papka1'})
 
-    def test_create_blobobj_1(self):
+    def test_generate_blobobject_1(self):
         """
         проверка сохранения blobobj из папки  test-files/1/
         """
+        etalon_set = {'000000 blob c79c497f5012c3065de47887d819ecca426ac697 text_for_blobobj.txt'}
         treeObj = TreeObject(input_dir=self.input_dir + '1/',
                              output_dir=self.output_dir)
-        treeObj.get_all_files_and_directory()
-
+        treeObj.generate()
+        self.assertEqual((treeObj.obj == etalon_set), True)
