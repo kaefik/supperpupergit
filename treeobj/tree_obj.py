@@ -80,6 +80,19 @@ class TreeObject:
         for item in self.obj:
             print(item)
 
+    def compress(self):
+        """
+        убрать мусор из объектов, то есть у тех sha1 == None
+        """
+        new_obj = set()
+        for item in self.obj:
+            s_item = item.split()
+            # print(s_item)
+            if s_item[2] == 'None':
+                continue
+            new_obj.add(item)
+        self.obj = new_obj
+
     def get_all_files_and_directory(self):
         """
         поиск всех файлов и папок в self.input_dir
@@ -91,7 +104,7 @@ class TreeObject:
         """
         получение sha1 по содержимому obj
         """
-        sort_obj = sorted(self.obj)
+        sort_obj = sorted(self.obj, reverse=False)
         res = '\n'.join(str(e) for e in sort_obj)
         return obj_sha1(res.encode())
 
@@ -163,6 +176,13 @@ class TreeObject:
         flag_empty_dir = self.generate()
 
         if not flag_empty_dir:
+            return None
+
+        # удаляем директории которые без файлов
+        self.compress()
+
+        # print(self.obj)
+        if self.obj == set():
             return None
 
         sort_obj = sorted(self.obj, reverse=True)
