@@ -1,6 +1,7 @@
 import unittest
 import os
 import shutil
+from tools_objects import create_new_dir, get_file_dirs
 
 from treeobj.tree_obj import TreeObject
 
@@ -16,11 +17,7 @@ class TreeObjectTest(unittest.TestCase):
 
     def setUp(self) -> None:
         # создаем папку для файлов которые создаются для тестов
-        try:
-            os.mkdir(self.output_dir)
-        except FileExistsError:
-            shutil.rmtree(self.output_dir, ignore_errors=False, onerror=None)
-            os.mkdir(self.output_dir)
+        create_new_dir(self.output_dir)
 
     def tearDown(self) -> None:
         # удаляем папку для файлов которые создаются для тестов
@@ -60,13 +57,43 @@ class TreeObjectTest(unittest.TestCase):
     def test_generate_blobobject_and_directory_2(self):
         """
         проверка строк которые получаются из папки  test-files/2/
-        эталон резщультата находится в папке out-etalon/2/
+        эталон результата находится в папке out-etalon/2/
         """
         treeObj = TreeObject(input_dir=self.input_dir + '2/',
                              output_dir=self.output_dir)
         treeObj.save()
-
-        print(f'\n\n obj = ')
-        treeObj.print()
+        # print(f'\n\n obj = ')
+        # treeObj.print()
         # TODO: здесь сделать сравнение двух папок на идентичность содержимого
         # self.assertEqual((treeObj.obj == etalon_set), True)
+
+    def test_generate_blobobject_and_directory_0(self):
+        """
+        проверка строк которые получаются из папки пустой
+        никакого объекта не должно быть
+
+        """
+        input_dir = self.input_dir + '0/'
+        create_new_dir(input_dir)
+        treeObj = TreeObject(input_dir=input_dir,
+                             output_dir=self.output_dir)
+        treeObj.save()
+        files, directory = get_file_dirs(self.output_dir)
+
+        self.assertEqual((files == set()), True)
+        self.assertEqual((directory == set()), True)
+
+    def test_generate_blobobject_and_directory_0(self):
+        """
+        проверка строк которые получаются из папки пустой
+        никакого объекта не должно быть
+        """
+        input_dir = self.input_dir + '0/'
+        create_new_dir(input_dir)
+        treeObj = TreeObject(input_dir=input_dir,
+                             output_dir=self.output_dir)
+        treeObj.save()
+        files, directory = get_file_dirs(self.output_dir)
+
+        self.assertEqual((files == set()), True)
+        self.assertEqual((directory == set()), True)

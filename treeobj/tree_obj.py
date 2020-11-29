@@ -74,7 +74,7 @@ class TreeObject:
         self.parent_tree = None  # Tree родитель
         self._files = set()  # все найденные файлы в папке self.input_dir
         self._directory = set()  # все найденные папки в папке self.input_dir
-        self.sha1 = '0000000000000000000000000000000000000000'
+        self.sha1 = None  # '0000000000000000000000000000000000000000'
 
     def print(self):
         for item in self.obj:
@@ -97,9 +97,16 @@ class TreeObject:
     def generate(self):
         """
         генерация содержимого дерева
+        return: Flase - значит папка пустая, т.е. нет ни папок ни файлов
         """
         self.obj = set()
         self.get_all_files_and_directory()
+
+        if self._files == set() and self._directory == set():
+            self.sha1 = None
+            self.obj = set()
+            return False
+
         # создание объектов типа blob
         for item in self._files:
             item_obj = ItemTreeObject(input_name=self.input_dir + '/' + item)
@@ -109,10 +116,11 @@ class TreeObject:
 
         # создание объектов типа tree
         for item in self._directory:
-            item_obj = ItemTreeObject(input_name=self.input_dir + item)
+            item_obj = ItemTreeObject(input_name=self.input_dir + '/' + item)
             item_obj.save(self.output_dir)
             res = item_obj.get()
             self.obj.add(res)
+        return True
 
     def check_exist_blob(self, check_dir=""):
         """
@@ -148,7 +156,10 @@ class TreeObject:
         return: sha1 объекта
         """
         # генерация перед сохранением данных
-        self.generate()
+        flag_empty_dir = self.generate()
+
+        if not flag_empty_dir:
+            return self.sha1
 
         filecontent = '\n'.join(str(e) for e in self.obj)
         self.sha1 = obj_sha1(filecontent.encode())
