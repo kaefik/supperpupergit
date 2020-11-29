@@ -39,7 +39,7 @@ def create_new_dir(input_dir=''):
     создает папку заново, если папка есть, то ее удаляет без предупреждения и заново создает папку
     """
     try:
-        os.mkdir(input_dir)
+        os.makedirs(input_dir)
     except FileExistsError:
         shutil.rmtree(input_dir, ignore_errors=False, onerror=None)
         os.mkdir(input_dir)
