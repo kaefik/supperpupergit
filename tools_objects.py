@@ -33,6 +33,17 @@ def get_file_dirs(input_dir):
     return files, directory
 
 
+def create_new_dir(input_dir=''):
+    """
+    создает папку заново, если папка есть, то ее удаляет без предупреждения и заново создает папку
+    """
+    try:
+        os.mkdir(input_dir)
+    except FileExistsError:
+        shutil.rmtree(input_dir, ignore_errors=False, onerror=None)
+        os.mkdir(input_dir)
+
+
 def main():
     # f, d = get_file_dirs('/home/oilnur/prj/prj-py/supperpupergit')
     # print(d)
