@@ -113,19 +113,29 @@ class TreeObjectTest(unittest.TestCase):
         self.assertEqual((files == set()), True)
         self.assertEqual((directory == set()), True)
 
-    # def test_generate_blobobject_and_directory_3(self):
-    #     """
-    #     проверка как создаеются объекты когда есть папки и в них одинаковый файл с одинаковым именем
-    #     """
-    #     # input_dir = self.input_dir + '0/1/2/3'
-    #     # create_new_dir(input_dir)
-    #     treeObj = TreeObject(input_dir=self.input_dir + '3/',
-    #                          output_dir=self.output_dir + '7/')
-    #     treeObj.save()
-    #     print('\n\n')
-    #     treeObj.print()
-    #     print(f'\n{treeObj.obj}')
-    #     files, directory = get_file_dirs(self.output_dir + '7/')
-    #
-    #     self.assertEqual((files == set()), True)
-    #     self.assertEqual((directory == set()), True)
+    def test_generate_blobobject_and_directory_3(self):
+        """
+        проверка как создаеются объекты когда есть папки и в них одинаковый файл с одинаковым именем
+        """
+        input_dir = self.input_dir + '3/'
+        output_dir = self.output_dir + '7/'
+        # создание тестового задания
+        create_new_dir(input_dir)
+        create_new_dir(input_dir+'papka1/papka1_1')
+        create_new_dir(input_dir+'papka2')
+        shutil.copy(self.input_dir+'file1.txt', input_dir)
+        shutil.copy(self.input_dir+'file1.txt', input_dir+'papka1')
+        shutil.copy(self.input_dir+'file1.txt', input_dir+'papka2')
+
+        create_new_dir(output_dir)
+
+        treeObj = TreeObject(input_dir=input_dir,
+                             output_dir=output_dir)
+        treeObj.save()
+        # print('\n\n')
+        # treeObj.print()
+        # print(f'\n{treeObj.obj}')
+        files, directory = get_file_dirs(output_dir)
+
+        self.assertEqual((files == set()), True)
+        self.assertEqual((directory == {'08', '5b', '8e'}), True)
