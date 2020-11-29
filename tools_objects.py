@@ -5,6 +5,7 @@
 """
 import os
 import hashlib
+import shutil
 
 
 def obj_sha1(bstr):
