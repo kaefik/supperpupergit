@@ -5,7 +5,7 @@ import shutil
 from treeobj.tree_obj import TreeObject
 
 
-class BlobObjectTest(unittest.TestCase):
+class TreeObjectTest(unittest.TestCase):
     """ проверяем работоспособность объектов типа Tree """
 
     @classmethod
@@ -56,3 +56,17 @@ class BlobObjectTest(unittest.TestCase):
                              output_dir=self.output_dir)
         treeObj.generate()
         self.assertEqual((treeObj.obj == etalon_set), True)
+
+    def test_generate_blobobject_and_directory_2(self):
+        """
+        проверка строк которые получаются из папки  test-files/2/
+        эталон резщультата находится в папке out-etalon/2/
+        """
+        treeObj = TreeObject(input_dir=self.input_dir + '2/',
+                             output_dir=self.output_dir)
+        treeObj.save()
+
+        print(f'\n\n obj = ')
+        treeObj.print()
+        # TODO: здесь сделать сравнение двух папок на идентичность содержимого
+        # self.assertEqual((treeObj.obj == etalon_set), True)

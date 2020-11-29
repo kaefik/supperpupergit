@@ -1,0 +1,4 @@
+36
+import os
+
+print('Hello, people!!!')

@@ -45,10 +45,12 @@ class ItemTreeObject:
             self.right_access = '000000'
         else:
             # TODO: вставить создание объекта TreeObject
+            self.obj = TreeObject(input_dir=self.input_name, output_dir=output_dir)
             self.typeobj = TREE
             self.right_access = '000000'
-            self.sha1 = '0000000000000000000000000000000000000000'
-            self.name = self.input_name
+            # self.obj.generate()
+            self.sha1 = self.obj.save()
+            self.name = os.path.basename(self.input_name)
 
     def get(self):
         """
@@ -72,6 +74,11 @@ class TreeObject:
         self.parent_tree = None  # Tree родитель
         self._files = set()  # все найденные файлы в папке self.input_dir
         self._directory = set()  # все найденные папки в папке self.input_dir
+        self.sha1 = '0000000000000000000000000000000000000000'
+
+    def print(self):
+        for item in self.obj:
+            print(item)
 
     def get_all_files_and_directory(self):
         """
@@ -79,6 +86,13 @@ class TreeObject:
         :return:
         """
         self._files, self._directory = get_file_dirs(self.input_dir)
+
+    def get_sha1(self):
+        """
+        получение sha1 по содержимому obj
+        """
+        res = '\n'.join(str(e) for e in self.obj)
+        return obj_sha1(res.encode())
 
     def generate(self):
         """
@@ -88,16 +102,73 @@ class TreeObject:
         self.get_all_files_and_directory()
         # создание объектов типа blob
         for item in self._files:
+            item_obj = ItemTreeObject(input_name=self.input_dir + '/' + item)
+            item_obj.save(self.output_dir)
+            res = item_obj.get()
+            self.obj.add(res)
+
+        # создание объектов типа tree
+        for item in self._directory:
             item_obj = ItemTreeObject(input_name=self.input_dir + item)
             item_obj.save(self.output_dir)
             res = item_obj.get()
             self.obj.add(res)
 
-    def save(self, filename=''):
+    def check_exist_blob(self, check_dir=""):
+        """
+        проверка на существования такого же tree файла
+        :param check_dir  - папка там где находится файл blobobject
+        :return: True - если такой файл существует
+        """
+        if check_dir == "":
+            check_dir = self.output_dir
+
+        directory = self.sha1[:2] + '/'
+        filename = self.sha1[2:]
+        full_filename = check_dir + directory + filename
+        flag_exist_file = os.path.exists(full_filename)
+
+        if flag_exist_file:
+            with open(full_filename, "br") as f:
+                filecontent = f.read()
+
+            sha1_file = obj_sha1(filecontent)
+            if sha1_file != self.sha1:
+                error_text = f"FATAL ERROR: Файл {directory + filename} существует, но содержимое скомпрометировано."
+                # print(error_text)
+                raise BaseException(error_text)
+        else:
+            return False
+
+        return True
+
+    def save(self):
         """
         сохранение тектового представления дерева в файл filename
+        return: sha1 объекта
         """
-        pass
+        # генерация перед сохранением данных
+        self.generate()
+
+        filecontent = '\n'.join(str(e) for e in self.obj)
+        self.sha1 = obj_sha1(filecontent.encode())
+        tree_dir = self.output_dir + self.sha1[:2] + '/'
+        # проверка на существование корректного tree-файла
+        if self.check_exist_blob():
+            return self.sha1
+
+        try:
+            os.makedirs(tree_dir)
+        except FileExistsError:
+            # если файл существует проверяем на то что он корректный с точки зрения хеша
+            flag = self.check_exist_blob()
+            if flag:
+                return self.sha1
+
+        # первой строкой добавляем размер файла, остальное самим файлом
+        with open(tree_dir + self.sha1[2:], "tw") as f:
+            f.write(filecontent)
+        return self.sha1
 
 
 def main():
