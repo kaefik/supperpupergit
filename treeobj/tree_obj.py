@@ -48,7 +48,6 @@ class ItemTreeObject:
             self.obj = TreeObject(input_dir=self.input_name, output_dir=output_dir)
             self.typeobj = TREE
             self.right_access = '000000'
-            # self.obj.generate()
             self.sha1 = self.obj.save()
             self.name = os.path.basename(self.input_name)
 
@@ -57,6 +56,7 @@ class ItemTreeObject:
         получение строки для сохранения результата
         """
         result = f'{self.right_access} {self.typeobj} {self.sha1} {self.name}'
+        # result = {'access': self.right_access, 'type': self.typeobj, 'sha1': self.sha1, 'name': self.name}
         return result
 
 
@@ -91,13 +91,14 @@ class TreeObject:
         """
         получение sha1 по содержимому obj
         """
-        res = '\n'.join(str(e) for e in self.obj)
+        sort_obj = sorted(self.obj)
+        res = '\n'.join(str(e) for e in sort_obj)
         return obj_sha1(res.encode())
 
     def generate(self):
         """
         генерация содержимого дерева
-        return: Flase - значит папка пустая, т.е. нет ни папок ни файлов
+        return: False - значит папка пустая, т.е. нет ни папок ни файлов
         """
         self.obj = set()
         self.get_all_files_and_directory()
@@ -118,6 +119,8 @@ class TreeObject:
         for item in self._directory:
             item_obj = ItemTreeObject(input_name=self.input_dir + '/' + item)
             item_obj.save(self.output_dir)
+            # if sha1 is None:
+            #     return False
             res = item_obj.get()
             self.obj.add(res)
         return True
@@ -155,14 +158,21 @@ class TreeObject:
         сохранение тектового представления дерева в файл filename
         return: sha1 объекта
         """
+        # если нет объектов, то нечего сохранять
         # генерация перед сохранением данных
         flag_empty_dir = self.generate()
 
-        if (not flag_empty_dir) or (self.sha1 == None):
-            return self.sha1
+        if not flag_empty_dir:
+            return None
 
-        filecontent = '\n'.join(str(e) for e in self.obj)
+        sort_obj = sorted(self.obj, reverse=True)
+        filecontent = '\n'.join(str(e) for e in sort_obj)
+
         self.sha1 = obj_sha1(filecontent.encode())
+
+        if self.sha1 is None:
+            return None
+
         tree_dir = self.output_dir + self.sha1[:2] + '/'
         # проверка на существование корректного tree-файла
         if self.check_exist_blob():
