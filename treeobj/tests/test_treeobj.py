@@ -97,3 +97,18 @@ class TreeObjectTest(unittest.TestCase):
 
         self.assertEqual((files == set()), True)
         self.assertEqual((directory == set()), True)
+
+    def test_generate_blobobject_and_directory_emptydirectories(self):
+        """
+        проверка строк которые получаются из вложенных папок без файлов
+        никакого объектов не должно быть создано
+        """
+        input_dir = self.input_dir + '0/1/2/3'
+        create_new_dir(input_dir)
+        treeObj = TreeObject(input_dir=self.input_dir+'0/',
+                             output_dir=self.output_dir)
+        treeObj.save()
+        files, directory = get_file_dirs(self.output_dir)
+
+        self.assertEqual((files == set()), True)
+        self.assertEqual((directory == set()), True)

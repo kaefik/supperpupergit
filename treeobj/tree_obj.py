@@ -158,7 +158,7 @@ class TreeObject:
         # генерация перед сохранением данных
         flag_empty_dir = self.generate()
 
-        if not flag_empty_dir:
+        if (not flag_empty_dir) or (self.sha1 == None):
             return self.sha1
 
         filecontent = '\n'.join(str(e) for e in self.obj)
