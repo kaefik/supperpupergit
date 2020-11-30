@@ -121,11 +121,11 @@ class TreeObjectTest(unittest.TestCase):
         output_dir = self.output_dir + '7/'
         # создание тестового задания
         create_new_dir(input_dir)
-        create_new_dir(input_dir+'papka1/papka1_1')
-        create_new_dir(input_dir+'papka2')
-        shutil.copy(self.input_dir+'file1.txt', input_dir)
-        shutil.copy(self.input_dir+'file1.txt', input_dir+'papka1')
-        shutil.copy(self.input_dir+'file1.txt', input_dir+'papka2')
+        create_new_dir(input_dir + 'papka1/papka1_1')
+        create_new_dir(input_dir + 'papka2')
+        shutil.copy(self.input_dir + 'file1.txt', input_dir)
+        shutil.copy(self.input_dir + 'file1.txt', input_dir + 'papka1')
+        shutil.copy(self.input_dir + 'file1.txt', input_dir + 'papka2')
 
         create_new_dir(output_dir)
 
@@ -139,3 +139,6 @@ class TreeObjectTest(unittest.TestCase):
 
         self.assertEqual((files == set()), True)
         self.assertEqual((directory == {'08', '5b', '8e'}), True)
+
+
+
