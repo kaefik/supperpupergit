@@ -15,15 +15,22 @@ class BlobObject:
         self.output_dir = output_dir
         self.filename = filename
         self.sha1 = ""
-        if not os.path.exists(filename):
-            raise FileNotFoundError(f"Файл {filename} не существует.")
-        self.size = os.path.getsize(self.filename)  # размер файла
+        if not os.path.exists(self.filename):
+            self.size = 0
+        else:
+            self.size = os.path.getsize(self.filename)  # размер файла
 
     def save(self):
         """
         сохранить blob файл в указанную папку, также если существует blob файл проверить на целостность
         :return:
         """
+        if not os.path.exists(self.filename):
+            str_err = f'Файл {self.filename} не существует.'
+            raise FileNotFoundError(str_err)
+
+        self.size = os.path.getsize(self.filename)
+
         bstr_size = str.encode(str(self.size) + '\n')
 
         with open(self.filename, 'br') as f:

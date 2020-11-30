@@ -28,7 +28,8 @@ class BlobObjectTest(unittest.TestCase):
         BlobOblect: проверка на обработку ошибки на не существования файла
         :return:
         """
-        self.assertRaises(FileNotFoundError, BlobObject, filename='11', output_dir='')
+        bobj = BlobObject(filename='11', output_dir='')
+        self.assertRaises(FileNotFoundError, bobj.save)
 
     def test_check_FileSize(self):
         """
