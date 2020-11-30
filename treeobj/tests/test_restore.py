@@ -21,7 +21,7 @@ class RestoreObjectTest(unittest.TestCase):
         """
         ex_line = '001000 blob dd69304ab57e87704fd8d8f57827c72124e40016 файл 1.py'
         result = get_from_text(ex_line)
-        print(result)
+        # print(result)
         self.assertEqual(result[0] == '001000', True)
         self.assertEqual(result[1] == 'blob', True)
         self.assertEqual(result[2] == 'dd69304ab57e87704fd8d8f57827c72124e40016', True)

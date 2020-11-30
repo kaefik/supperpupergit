@@ -95,7 +95,7 @@ class BlobObject:
         file_dir = self.sha1[:2] + '/'
         file_name = self.sha1[2:]
 
-        print(input_directory + file_dir + file_name)
+        # print(input_directory + file_dir + file_name)
 
         with open(input_directory + file_dir + file_name, 'br') as f:
             file_size = f.readline()

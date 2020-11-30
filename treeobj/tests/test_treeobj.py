@@ -139,6 +139,3 @@ class TreeObjectTest(unittest.TestCase):
 
         self.assertEqual((files == set()), True)
         self.assertEqual((directory == {'08', '5b', '8e'}), True)
-
-
-

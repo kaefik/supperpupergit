@@ -267,7 +267,7 @@ def restore_from_obj(input_dir='./', file_treeobj='HEAD', output_dir='./restore/
         item = get_from_text(el)
         if item[1] == 'tree':
             dir_name = output_dir + item[3]
-            print(f'Create TREE = {dir_name}')
+            # print(f'Create TREE = {dir_name}')
             os.mkdir(dir_name)
             sha1_dir = item[2]
             output_dir_new = dir_name + '/'
@@ -275,7 +275,7 @@ def restore_from_obj(input_dir='./', file_treeobj='HEAD', output_dir='./restore/
             restore_from_obj(input_dir=input_dir, file_treeobj=file_treeobj_new, output_dir=output_dir_new)
         else:
             filename = item[3]
-            print(f'Create BLOB = {filename}')
+            # print(f'Create BLOB = {filename}')
             bobj = BlobObject()
             bobj.sha1 = item[2]
             bobj.restore(input_directory=input_dir, output_file=output_dir + filename)
