@@ -212,38 +212,6 @@ class TreeObject:
         return self.sha1
 
 
-def restore_from_obj_old(input_dir='./', file_treeobj='HEAD', output_dir='./restore/'):
-    """
-    восстановление папок (СТАРОЕ)
-    param:
-        file_treeobj - файл TreeObject с которого начнется восстановление папок и файлов
-    return:
-    """
-    _, directory = get_file_dirs(input_dir)
-
-    for d in directory:
-        cur_directory = input_dir + d
-        files, _ = get_file_dirs(cur_directory)
-        for file in files:
-            cur_file = cur_directory + '/' + file
-            # print(cur_file)
-            # bobj = BlobObject()
-            # bobj.sha1 = d + file
-            # bobj.restore(input_directory=input_dir, output_file=output_dir+file)
-            with open(cur_file, 'r') as f:
-                first_line = f.readline()
-            try:
-                size = int(first_line)
-            except ValueError:
-                print(f'{cur_file}  =  TREE')
-            else:
-                print(f'{cur_file}  =  BLOB')
-                filename = file  # TODO: получить имя файла из соответствующего дерева
-                bobj = BlobObject()
-                bobj.sha1 = d + filename
-                bobj.restore(input_directory=input_dir, output_file=output_dir + filename)
-
-
 def get_from_text(line='000000 tree 0000000000000 papla'):
     res = line.split()
     # TODO: сделать так чтобы len(res)>4, то начиная с индекса 4 до конца объединить в одну строку
@@ -274,11 +242,12 @@ def restore_from_obj(input_dir='./', file_treeobj='HEAD', output_dir='./restore/
             file_treeobj_new = sha1_dir[:2] + '/' + sha1_dir[2:]
             restore_from_obj(input_dir=input_dir, file_treeobj=file_treeobj_new, output_dir=output_dir_new)
         else:
-            filename = item[3]
-            # print(f'Create BLOB = {filename}')
-            bobj = BlobObject()
-            bobj.sha1 = item[2]
-            bobj.restore(input_directory=input_dir, output_file=output_dir + filename)
+            if item[1] == 'blob':
+                filename = item[3]
+                # print(f'Create BLOB = {filename}')
+                bobj = BlobObject()
+                bobj.sha1 = item[2]
+                bobj.restore(input_directory=input_dir, output_file=output_dir + filename)
 
 
 def main():
