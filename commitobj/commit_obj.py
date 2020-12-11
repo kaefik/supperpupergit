@@ -49,11 +49,13 @@ class CommitObject:
         else:
             timezone = f'-{delta_hour_timezone}'  # часовая зона
         result += f'tree {self.treeobj_sha1}\n'
-        if self.parrent_commint is not None:
+        if (self.parrent_commint is not None):
             parent = ''
             for p in self.parrent_commint:
                 parent += p + ' '
-            result += f'parent {parent}\n'
+            parent = parent.strip()
+            if len(parent) != 0:
+                result += f'parent {parent}\n'
         result += f'author {self.author["name"]} {self.author["email"]} {unixtime} {timezone}\n'
         result += f'committer {self.commiter["name"]} {self.commiter["email"]} {unixtime} {timezone}\n'
         result += '\n'
@@ -126,14 +128,15 @@ class CommitObject:
 
 
 def main():
+    pass
     # c = CommitObject(treeobj_sha1='123456789', parrent_commint=['dekadklsahdkas', '13131313'],
     #                  author={'name': 'Ilnur Saifutdinov', 'email': 'my@my.com'},
     #                  commiter={'name': 'Amir Saifutdinov', 'email': 'my@my2.com'},
     #                  message_commit='first commit')
 
-    c = CommitObject()
-
-    print(c.generate())
+    # c = CommitObject()
+    #
+    # print(c.generate())
 
 
 if __name__ == '__main__':
