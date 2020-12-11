@@ -30,3 +30,5 @@
 # Запуск тестов для модулей
 
 * start-test-blobobj.sh - запуск тестов для проверки Blob Oblects
+* start-test-treeobj.sh - запуск тестов для проверки Tree Oblects
+* start-test-commitobj.sh - запуск тестов для проверки Commit Oblects
