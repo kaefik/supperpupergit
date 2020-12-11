@@ -2,8 +2,9 @@
  реализация Объектов типа Commit
 """
 
-from datetime import datetime
+import os
 import time
+from datetime import datetime
 from tools_objects import obj_sha1, get_file_dirs
 
 
@@ -62,32 +63,30 @@ class CommitObject:
         result += f'{self.message_commit}'
         return result
 
-    def check_exist_blob(self, check_dir=""):
+    def check_exist_commit_file(self, check_dir="./"):
         """
-        проверка на существования такого же commit файла
-        :param check_dir  - папка там где находится файл blobobject
+        проверка на существования такого же commit файла,
+        также проверяется корректность файла если он существует
+        :param check_dir  - папка там где находится файл commitobject
         :return: True - если такой файл существует
         """
-        # TODO: сделать функцию проверки существования файла коммита
-        # if check_dir == "":
-        #     check_dir = self.output_dir
-        #
-        # directory = self.sha1[:2] + '/'
-        # filename = self.sha1[2:]
-        # full_filename = check_dir + directory + filename
-        # flag_exist_file = os.path.exists(full_filename)
-        #
-        # if flag_exist_file:
-        #     with open(full_filename, "br") as f:
-        #         filecontent = f.read()
-        #
-        #     sha1_file = obj_sha1(filecontent)
-        #     if sha1_file != self.sha1:
-        #         error_text = f"FATAL ERROR: Файл {directory + filename} существует, но содержимое скомпрометировано."
-        #         # print(error_text)
-        #         raise BaseException(error_text)
-        # else:
-        #     return False
+
+        directory = self.sha1[:2] + '/'
+        filename = self.sha1[2:]
+        full_filename = check_dir + directory + filename
+        flag_exist_file = os.path.exists(full_filename)
+
+        if flag_exist_file:
+            with open(full_filename, "br") as f:
+                filecontent = f.read()
+
+            sha1_file = obj_sha1(filecontent)
+            if sha1_file != self.sha1:
+                error_text = f"FATAL ERROR: Файл {directory + filename} существует, но содержимое скомпрометировано."
+                # print(error_text)
+                raise BaseException(error_text)
+        else:
+            return False
 
         return True
 
@@ -96,7 +95,6 @@ class CommitObject:
         сохранение коммита в папку output_dir
         return: True - если сохранился коммит в файл, иначе False
         """
-        self.generate()
         # TODO: здесь должно быть  сохранение коммита
 
         filecontent = self.generate()
@@ -111,14 +109,14 @@ class CommitObject:
 
         commit_dir = output_dir + self.sha1[:2] + '/'
         # проверка на существование корректного commit-файла
-        if self.check_exist_blob(output_dir):
+        if self.check_exist_commit_file(output_dir):
             return True
 
         try:
             os.makedirs(commit_dir)
         except FileExistsError:
             # если файл существует проверяем на то что он корректный с точки зрения хеша
-            flag = self.check_exist_blob(output_dir)
+            flag = self.check_exist_commit_file(output_dir)
             if flag:
                 return self.sha1
 
@@ -129,14 +127,6 @@ class CommitObject:
 
 def main():
     pass
-    # c = CommitObject(treeobj_sha1='123456789', parrent_commint=['dekadklsahdkas', '13131313'],
-    #                  author={'name': 'Ilnur Saifutdinov', 'email': 'my@my.com'},
-    #                  commiter={'name': 'Amir Saifutdinov', 'email': 'my@my2.com'},
-    #                  message_commit='first commit')
-
-    # c = CommitObject()
-    #
-    # print(c.generate())
 
 
 if __name__ == '__main__':
